@@ -35,6 +35,8 @@ $(add_matchcondition).click(function (e) {
     const indexs = id.split("-").slice(3);
     console.log(indexs);
     //for(index in index) todo
+    $(`#content_${indexs[0]}`).remove();
+    $(`#switch-to-array-${indexs[0]}`).replaceWith("<div>array place</div>");
     agreement["sections"][parseInt(indexs[0])]["content"] = [];
   });
 
