@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div
+      id="metadata"
+      style="
+        min-height: 20vh;
+        min-width: 100vw;
+        border: 3px dotted red;
+        margin-bottom: 15px;
+      "
+    >
+      <input
+        type="text"
+        name="university-name"
+        autocomplete="off"
+        placeholder="add university name here"
+        id="university-name"
+        style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
+      />
+      <input
+        type="text"
+        name="college-name"
+        autocomplete="off"
+        placeholder="add community college name here"
+        id="college-name"
+        style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
+      />
+      <input
+        type="text"
+        name="major-name"
+        autocomplete="off"
+        placeholder="add major name here"
+        id="major-name"
+        style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
+      />
+    </div>
+
+    <div id="input_wrapper"></div>
+    <input type="button" value="Add Section" id="add_matchcondition" />
+    <input type="button" value="send agreement to server" id="server-button" />
+  </body>
+</html>
+
+<script src="../js/addInputTag.js"></script>
+<script src="../js/send.js"></script>
