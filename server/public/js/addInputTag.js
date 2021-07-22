@@ -22,7 +22,7 @@ $(add_matchcondition).click(function (e) {
             placeholder="content"
             id="content_${sectionCounter}"
             />
-            <input type="button" value="SWITCH TO ARRAY" id="switch-to-array-${sectionCounter}" />
+            <input type="button" value="SWITCH TO ARRAY" class="switch-to-array" />
         </div>
         <div>
             <input
@@ -36,53 +36,19 @@ $(add_matchcondition).click(function (e) {
     </div>`
   );
 
-  $(`#switch-to-array-${sectionCounter}`).click(function (e) {
-    const id = e.target.id;
-    const indexs = id.split("-").slice(3);
+  $("body").on("click", `.switch-to-array`, function (e) {
+    //console.log($(this).parent());
+    const id = $(this).parent().parent().attr("id");
+    const indexs = id.split("-").slice(1);
     console.log(indexs);
     //for(index in index) todo
-    $(`#content_${indexs[0]}`).remove();
-    $(`#switch-to-array-${indexs[0]}`).replaceWith(
-      `<div style='min-height: 50px;min-width: 50px; border: 1px solid red; margin-left: 10px;' id="array-${indexs[0]}">
-        <input type="button" value="Add Element to Array" id="add-to-array-${indexs[0]}" />
+    $(this)
+      .prev()
+      .replaceWith(
+        `<div style='min-height: 50px;min-width: 50px; border: 1px solid red; margin-left: 10px;' id="array-${indexs[0]}">
+        <input type="button" value="Add Element to Array" class="add-to-array" />
        </div>`
-    );
-    $(`#add-to-array-${indexs[0]}`).click(function (e) {
-      let id = $(e.target).parent().attr("id").split("-")[1];
-      console.log(id);
-      $(
-        `#array-${id}`
-      ).append(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=section-${id}>
-        <div>
-            <input
-            type="text"
-            name="message"
-            autocomplete="off"
-            placeholder="message"
-            id="message_${id}"
-        />
-        </div>
-        <div>
-            <input
-            type="text"
-            name="content"
-            autocomplete="off"
-            placeholder="content"
-            id="content_${id}"
-            />
-            <input type="button" value="SWITCH TO ARRAY" id="switch-to-array-${id}" />
-        </div>
-        <div>
-            <input
-            type="text"
-            name="relationship"
-            autocomplete="off"
-            placeholder="relationship"
-            id="relationship_${id}"
-            />
-        </div>
-    </div>`);
-    });
+      );
     agreement["sections"][parseInt(indexs[0])]["content"] = [];
   });
 
@@ -95,3 +61,77 @@ $(add_matchcondition).click(function (e) {
 });
 
 //<input type='button' value='Add' id='add_matchcondition_${counter}' />
+
+$("body").on("click", `.add-to-array`, function (e) {
+  let id = $(e.target).parent().attr("id").split("-")[1];
+  console.log(id);
+  console.log($(this).prev());
+  if ($(this).prev().length === 0) {
+    $(`#array-${id}`)
+      .prepend(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element-${id}-${0}>
+        <div>
+            <input
+            type="text"
+            name="message"
+            autocomplete="off"
+            placeholder="message"
+            id="message-${id}-${0}"
+        />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="content"
+            autocomplete="off"
+            placeholder="content"
+            id="content-${id}-${0}"
+            />
+            <input type="button" value="SWITCH TO ARRAY" class="switch-to-array" />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="relationship"
+            autocomplete="off"
+            placeholder="relationship"
+            id="relationship-${id}-${0}"
+            />
+        </div>
+    </div>`);
+  } else {
+    let index = $(this).prev().attr("id").split("-")[3];
+    console.log(index);
+    $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element-${id}-${
+      parseInt(index) + 1
+    }>
+        <div>
+            <input
+            type="text"
+            name="message"
+            autocomplete="off"
+            placeholder="message"
+            id="message-${id}-${parseInt(index) + 1}"
+        />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="content"
+            autocomplete="off"
+            placeholder="content"
+            id="content-${id}-${parseInt(index) + 1}"
+            />
+            <input type="button" value="SWITCH TO ARRAY" class="switch-to-array" />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="relationship"
+            autocomplete="off"
+            placeholder="relationship"
+            id="relationship-${id}-${parseInt(index) + 1}"
+            />
+        </div>
+    </div>`).insertAfter(`#array-element-${id}-${parseInt(index)}`);
+  }
+});
