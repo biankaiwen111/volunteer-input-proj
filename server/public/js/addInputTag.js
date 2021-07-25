@@ -126,7 +126,13 @@ $(add_matchcondition)
           .on("click", `.add-to-array`, addElementToArray);
         console.log(indexs);
         //agreement["sections"][0]["content"] = [];
-        recursiveSetEmptyArrayToAgreement(indexs, agreement["sections"]);
+        let changeValueString = `agreement["sections"]`;
+        for (index of indexs) {
+          changeValueString = changeValueString + `[${index}]` + `["content"]`;
+        }
+        changeValueString = changeValueString + `=[]`;
+        eval(changeValueString);
+        //recursiveSetEmptyArrayToAgreement(indexs, agreement["sections"]);
       });
   });
 
@@ -223,5 +229,38 @@ function addElementToArray(e) {
             />
         </div>
     </div>`).insertAfter($(this).prev());
+  }
+  console.log(indexs);
+  let changeValueString = `agreement["sections"]`;
+  for (index of indexs) {
+    changeValueString = changeValueString + `[${index}]` + `["content"]`;
+  }
+  changeValueString =
+    changeValueString +
+    `.push({
+      message: "",
+      content: "",
+      relationship: "",
+    })`;
+  eval(changeValueString);
+  //recursiveAddElementToArray(indexs, agreement["sections"]);
+}
+
+function recursiveAddElementToArray(indexs, agreement) {
+  console.log(indexs, agreement);
+  if (indexs.length === 1) {
+    agreement[index]["content"].push({
+      message: "",
+      content: "",
+      relationship: "",
+    });
+    return;
+  }
+  if (indexs.length > 0) {
+    index = parseInt(indexs[0]);
+    recursiveSetEmptyArrayToAgreement(
+      indexs.slice(1),
+      agreement[index].content
+    );
   }
 }
