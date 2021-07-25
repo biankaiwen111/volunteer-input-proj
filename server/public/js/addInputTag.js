@@ -44,13 +44,13 @@ $(add_matchcondition)
       agreement["sections"][0]["relationship"] = "";
 
       //add event listen
-      $(`message-${0}`).on("input", function () {
+      $(`#message-${0}`).on("input", function () {
         agreement["sections"][0]["message"] = $(this).val();
       });
-      $(`content-${0}`).on("input", function () {
+      $(`#content-${0}`).on("input", function () {
         agreement["sections"][0]["content"] = $(this).val();
       });
-      $(`relationship-${0}`).on("input", function () {
+      $(`#relationship-${0}`).on("input", function () {
         agreement["sections"][0]["relationship"] = $(this).val();
       });
     } else {
@@ -92,13 +92,13 @@ $(add_matchcondition)
       agreement["sections"][parseInt(id)]["relationship"] = "";
 
       //add event listen
-      $(`message-${id}`).on("input", function () {
+      $(`#message-${id}`).on("input", function () {
         agreement["sections"][parseInt(id)]["message"] = $(this).val();
       });
-      $(`content-${id}`).on("input", function () {
+      $(`#content-${id}`).on("input", function () {
         agreement["sections"][parseInt(id)]["content"] = $(this).val();
       });
-      $(`relationship-${id}`).on("input", function () {
+      $(`#relationship-${id}`).on("input", function () {
         agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
       });
     }
@@ -125,32 +125,19 @@ $(add_matchcondition)
           .off("click", `.add-to-array`)
           .on("click", `.add-to-array`, addElementToArray);
         console.log(indexs);
+        console.log("-----");
+
         //agreement["sections"][0]["content"] = [];
         let changeValueString = `agreement["sections"]`;
         for (index of indexs) {
           changeValueString = changeValueString + `[${index}]` + `["content"]`;
         }
         changeValueString = changeValueString + `=[]`;
+        console.log(changeValueString);
         eval(changeValueString);
         //recursiveSetEmptyArrayToAgreement(indexs, agreement["sections"]);
       });
   });
-
-function recursiveSetEmptyArrayToAgreement(indexs, agreement) {
-  console.log(indexs, agreement);
-  if (indexs.length > 0) {
-    index = parseInt(indexs[0]);
-    if (typeof agreement[index]["content"] === "string") {
-      agreement[index]["content"] = [];
-      return;
-    }
-    recursiveSetEmptyArrayToAgreement(
-      indexs.slice(1),
-      agreement[index].content
-    );
-  }
-}
-
 //<input type='button' value='Add' id='add_matchcondition_${counter}' />
 
 function addElementToArray(e) {
@@ -194,11 +181,60 @@ function addElementToArray(e) {
             />
         </div>
     </div>`);
+    console.log(indexs);
+    let commonPrefix;
+    let changeValueString = `agreement["sections"]`;
+    for (index of indexs) {
+      changeValueString = changeValueString + `[${index}]` + `["content"]`;
+    }
+    commonPrefix = changeValueString;
+    changeValueString =
+      changeValueString +
+      `.push({
+      message: "",
+      content: "",
+      relationship: "",
+    })`;
+    eval(changeValueString);
+
+    $(`#message${temp}-${0}`).on("input", function () {
+      const bindingString =
+        commonPrefix.slice(0, -11) +
+        "['content']" +
+        `[${0}]` +
+        "['message']" +
+        "= $(this).val()";
+      console.log(bindingString);
+      eval(bindingString);
+      //agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
+    });
+
+    $(`#content${temp}-${0}`).on("input", function () {
+      const bindingString =
+        commonPrefix.slice(0, -11) +
+        "['content']" +
+        `[${0}]` +
+        "['content']" +
+        "= $(this).val()";
+      eval(bindingString);
+      //agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
+    });
+
+    $(`#relationship${temp}-${0}`).on("input", function () {
+      const bindingString =
+        commonPrefix.slice(0, -11) +
+        "['content']" +
+        `[${0}]` +
+        "['relationship']" +
+        "= $(this).val()";
+      eval(bindingString);
+      //agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
+    });
   } else {
-    let indexs = $(this).prev().attr("id").split("-");
+    let prevEle = $(this).prev().attr("id").split("-");
     //console.log(indexs);
     $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element${temp}-${
-      parseInt(indexs[indexs.length - 1]) + 1
+      parseInt(prevEle[prevEle.length - 1]) + 1
     }>
         <div>
             <input
@@ -206,7 +242,7 @@ function addElementToArray(e) {
             name="message"
             autocomplete="off"
             placeholder="message"
-            id="message${temp}-${parseInt(indexs[indexs.length - 1]) + 1}"
+            id="message${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}"
         />
         </div>
         <div>
@@ -215,7 +251,7 @@ function addElementToArray(e) {
             name="content"
             autocomplete="off"
             placeholder="content"
-            id="content${temp}-${parseInt(indexs[indexs.length - 1]) + 1}"
+            id="content${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}"
             />
             <input type="button" value="SWITCH TO ARRAY" class="switch-to-array" />
         </div>
@@ -225,24 +261,76 @@ function addElementToArray(e) {
             name="relationship"
             autocomplete="off"
             placeholder="relationship"
-            id="relationship${temp}-${parseInt(indexs[indexs.length - 1]) + 1}"
+            id="relationship${temp}-${
+      parseInt(prevEle[prevEle.length - 1]) + 1
+    }"
             />
         </div>
     </div>`).insertAfter($(this).prev());
-  }
-  console.log(indexs);
-  let changeValueString = `agreement["sections"]`;
-  for (index of indexs) {
-    changeValueString = changeValueString + `[${index}]` + `["content"]`;
-  }
-  changeValueString =
-    changeValueString +
-    `.push({
+
+    const idxs = `${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`
+      .split("-")
+      .slice(1);
+    console.log(idxs);
+    let commonPrefix;
+    let changeValueString = `agreement["sections"]`;
+    for (index of indexs) {
+      changeValueString = changeValueString + `[${index}]` + `["content"]`;
+    }
+    commonPrefix = changeValueString;
+    changeValueString =
+      changeValueString +
+      `.push({
       message: "",
       content: "",
       relationship: "",
     })`;
-  eval(changeValueString);
+    console.log(changeValueString);
+    eval(changeValueString);
+
+    $(`#message${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`).on(
+      "input",
+      function () {
+        const bindingString =
+          commonPrefix.slice(0, -11) +
+          "['content']" +
+          `[${parseInt(prevEle[prevEle.length - 1]) + 1}]` +
+          "['message']" +
+          "= $(this).val()";
+        eval(bindingString);
+        //agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
+      }
+    );
+
+    $(`#content${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`).on(
+      "input",
+      function () {
+        const bindingString =
+          commonPrefix.slice(0, -11) +
+          "['content']" +
+          `[${parseInt(prevEle[prevEle.length - 1]) + 1}]` +
+          "['content']" +
+          "= $(this).val()";
+        eval(bindingString);
+        //agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
+      }
+    );
+
+    $(`#relationship${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`).on(
+      "input",
+      function () {
+        const bindingString =
+          commonPrefix.slice(0, -11) +
+          "['content']" +
+          `[${parseInt(prevEle[prevEle.length - 1]) + 1}]` +
+          "['relationship']" +
+          "= $(this).val()";
+        eval(bindingString);
+        //agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
+      }
+    );
+  }
+
   //recursiveAddElementToArray(indexs, agreement["sections"]);
 }
 
