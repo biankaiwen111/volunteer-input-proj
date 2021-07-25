@@ -102,9 +102,8 @@ $(add_matchcondition)
         agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
       });
     }
-
     $("body")
-      .off("click")
+      .off("click", `.switch-to-array`)
       .on("click", `.switch-to-array`, function (e) {
         //console.log($(this).parent());
         const id = $(this).parent().parent().attr("id");
@@ -122,34 +121,44 @@ $(add_matchcondition)
         <input type="button" value="Add Element to Array" class="add-to-array" />
        </div>`
           );
+        $("body")
+          .off("click", `.add-to-array`)
+          .on("click", `.add-to-array`, addElementToArray);
         console.log(indexs);
-        let target = agreement["sections"];
-        console.log(target);
-        for (index of indexs) {
-          console.log(parseInt(index));
-          //target = target[parseInt(index)]["content"];
-          target = target[parseInt(index)]["content"];
-          console.log(target);
-        }
-        target = [];
+        //agreement["sections"][0]["content"] = [];
+        recursiveSetEmptyArrayToAgreement(indexs, agreement["sections"]);
       });
   });
 
+function recursiveSetEmptyArrayToAgreement(indexs, agreement) {
+  console.log(indexs, agreement);
+  if (indexs.length > 0) {
+    index = parseInt(indexs[0]);
+    if (typeof agreement[index]["content"] === "string") {
+      agreement[index]["content"] = [];
+      return;
+    }
+    recursiveSetEmptyArrayToAgreement(
+      indexs.slice(1),
+      agreement[index].content
+    );
+  }
+}
+
 //<input type='button' value='Add' id='add_matchcondition_${counter}' />
 
-$("body")
-  .off("click")
-  .on("click", `.add-to-array`, function (e) {
-    let indexs = $(e.target).parent().attr("id").split("-").slice(1);
-    //console.log(id);
-    let temp = "";
-    for (index of indexs) {
-      temp = temp + "-" + index;
-    }
-    console.log($(this).prev());
-    if ($(this).prev().length === 0) {
-      $($(this).parent())
-        .prepend(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element${temp}-${0}>
+function addElementToArray(e) {
+  //console.log("123");
+  let indexs = $(e.target).parent().attr("id").split("-").slice(1);
+  //console.log(id);
+  let temp = "";
+  for (index of indexs) {
+    temp = temp + "-" + index;
+  }
+  //console.log($(this).prev());
+  if ($(this).prev().length === 0) {
+    $($(this).parent())
+      .prepend(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element${temp}-${0}>
         <div>
             <input
             type="text"
@@ -179,12 +188,12 @@ $("body")
             />
         </div>
     </div>`);
-    } else {
-      let indexs = $(this).prev().attr("id").split("-");
-      //console.log(indexs);
-      $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element${temp}-${
-        parseInt(indexs[indexs.length - 1]) + 1
-      }>
+  } else {
+    let indexs = $(this).prev().attr("id").split("-");
+    //console.log(indexs);
+    $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element${temp}-${
+      parseInt(indexs[indexs.length - 1]) + 1
+    }>
         <div>
             <input
             type="text"
@@ -214,5 +223,5 @@ $("body")
             />
         </div>
     </div>`).insertAfter($(this).prev());
-    }
-  });
+  }
+}
