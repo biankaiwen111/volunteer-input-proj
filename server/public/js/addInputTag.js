@@ -180,6 +180,37 @@ function addElementToArray(e) {
             id="relationship${temp}-${0}"
             />
         </div>
+        <div id="equivalences${temp}-${0}" style="display:none;">
+          <div>
+            <input
+            type="text"
+            name="message"
+            autocomplete="off"
+            placeholder="message"
+            id="equivalences-message${temp}-${0}"
+          />
+          </div>
+          <div>
+            <input
+            type="text"
+            name="content"
+            autocomplete="off"
+            placeholder="content"
+            id="equivalences-content${temp}-${0}"
+          />
+            <input type="button" value="SWITCH TO ARRAY" class="equivalences-switch-to-array" />
+          </div>
+          <div>
+            <input
+            type="text"
+            name="relationship"
+            autocomplete="off"
+            placeholder="relationship"
+            id="equivalences-relationship${temp}-${0}"
+            />
+          </div>
+        </div>
+        <input type="button" value="EDITING EQUIVALENCES" class="editing-equ" />
     </div>`);
     console.log(indexs);
     let commonPrefix;
@@ -266,6 +297,44 @@ function addElementToArray(e) {
     }"
             />
         </div>
+        <div id="equivalences${temp}-${
+      parseInt(prevEle[prevEle.length - 1]) + 1
+    }" style="display:none;">
+        <div>
+            <input
+            type="text"
+            name="message"
+            autocomplete="off"
+            placeholder="message"
+            id="equivalences-message${temp}-${
+      parseInt(prevEle[prevEle.length - 1]) + 1
+    }"
+        />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="content"
+            autocomplete="off"
+            placeholder="content"
+            id="equivalences-content${temp}-${
+      parseInt(prevEle[prevEle.length - 1]) + 1
+    }"
+            />
+            <input type="button" value="SWITCH TO ARRAY" class="equivalences-switch-to-array" />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="relationship"
+            autocomplete="off"
+            placeholder="relationship"
+            id="equivalences-relationship${temp}-${
+      parseInt(prevEle[prevEle.length - 1]) + 1
+    }"/>
+        </div>
+        </div>
+        <input type="button" value="EDITING EQUIVALENCES" class="editing-equ" />
     </div>`).insertAfter($(this).prev());
 
     const idxs = `${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`
@@ -312,7 +381,6 @@ function addElementToArray(e) {
           "['content']" +
           "= $(this).val()";
         eval(bindingString);
-        //agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
       }
     );
 
@@ -326,29 +394,23 @@ function addElementToArray(e) {
           "['relationship']" +
           "= $(this).val()";
         eval(bindingString);
-        //agreement["sections"][parseInt(id)]["relationship"] = $(this).val();
       }
     );
   }
-
-  //recursiveAddElementToArray(indexs, agreement["sections"]);
 }
 
-function recursiveAddElementToArray(indexs, agreement) {
-  console.log(indexs, agreement);
-  if (indexs.length === 1) {
-    agreement[index]["content"].push({
-      message: "",
-      content: "",
-      relationship: "",
+$("body")
+  .off("click", `.editing-equ`)
+  .on("click", `.editing-equ`, function (e) {
+    $("#overlay").css({ display: "block" });
+    $(this).prev().css({
+      display: "block",
+      position: "fixed",
+      border: "solid 3px green",
     });
-    return;
-  }
-  if (indexs.length > 0) {
-    index = parseInt(indexs[0]);
-    recursiveSetEmptyArrayToAgreement(
-      indexs.slice(1),
-      agreement[index].content
-    );
-  }
-}
+  });
+
+$("#overlay").bind("click", function (e) {
+  $("div[id^='equivalences']").css({ display: "none" });
+  $("#overlay").css({ display: "none" });
+});

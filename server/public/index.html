@@ -9,44 +9,78 @@
   </head>
   <body>
     <div
-      id="metadata"
+      id="overlay"
       style="
-        min-height: 20vh;
-        min-width: 100vw;
-        border: 3px dotted red;
-        margin-bottom: 15px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        display: none;
+        background-color: #000;
+        opacity: 0.5;
       "
-    >
+    ></div>
+    <div>
+      <div
+        id="metadata"
+        style="
+          min-height: 20vh;
+          min-width: 100vw;
+          border: 3px dotted red;
+          margin-bottom: 15px;
+        "
+      >
+        <input
+          type="text"
+          name="university-name"
+          autocomplete="off"
+          placeholder="add university name here"
+          id="university-name"
+          style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
+        />
+        <input
+          type="text"
+          name="college-name"
+          autocomplete="off"
+          placeholder="add community college name here"
+          id="college-name"
+          style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
+        />
+        <input
+          type="text"
+          name="major-name"
+          autocomplete="off"
+          placeholder="add major name here"
+          id="major-name"
+          style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
+        />
+      </div>
+
+      <div id="input_wrapper">
+        <input type="button" value="Add Section" id="add_matchcondition" />
+      </div>
       <input
-        type="text"
-        name="university-name"
-        autocomplete="off"
-        placeholder="add university name here"
-        id="university-name"
-        style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
-      />
-      <input
-        type="text"
-        name="college-name"
-        autocomplete="off"
-        placeholder="add community college name here"
-        id="college-name"
-        style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
-      />
-      <input
-        type="text"
-        name="major-name"
-        autocomplete="off"
-        placeholder="add major name here"
-        id="major-name"
-        style="margin-top: 10vh; margin-left: 5vw; margin-right: 5vw"
+        type="button"
+        value="send agreement to server"
+        id="server-button"
       />
     </div>
 
-    <div id="input_wrapper">
-      <input type="button" value="Add Section" id="add_matchcondition" />
+    <div
+      id="modal"
+      style="
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border: solid 1px #000;
+        display: none;
+        background-color: #fff;
+      "
+    >
+      <h1>Modal Content!</h1>
     </div>
-    <input type="button" value="send agreement to server" id="server-button" />
   </body>
 </html>
 
