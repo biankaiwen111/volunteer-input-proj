@@ -210,8 +210,11 @@ function addElementToArray(e) {
             />
           </div>
         </div>
-        <input type="button" value="EDITING EQUIVALENCES" class="editing-equ" />
+        <input type="button" value="EDITING EQUIVALENCES" class="editing-equ" style="display:none" />
+        <input type="checkbox" id="has-equivalences${temp}-${0}">
+        <label for="has-equivalences${temp}-${0}">Has equivalences?</label>
     </div>`);
+    checkboxEvent(`#has-equivalences${temp}-${0}`);
     console.log(indexs);
     let commonPrefix;
     let changeValueString = `agreement["sections"]`;
@@ -334,9 +337,17 @@ function addElementToArray(e) {
     }"/>
         </div>
         </div>
-        <input type="button" value="EDITING EQUIVALENCES" class="editing-equ" />
+        <input type="button" value="EDITING EQUIVALENCES" class="editing-equ" style="display:none"/>
+        <input type="checkbox" id="has-equivalences${temp}-${
+      parseInt(prevEle[prevEle.length - 1]) + 1
+    }">
+        <label for="has-equivalences${temp}-${
+      parseInt(prevEle[prevEle.length - 1]) + 1
+    }">Has equivalences?</label>
     </div>`).insertAfter($(this).prev());
-
+    checkboxEvent(
+      `#has-equivalences${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`
+    );
     const idxs = `${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`
       .split("-")
       .slice(1);
@@ -405,12 +416,131 @@ $("body")
     $("#overlay").css({ display: "block" });
     $(this).prev().css({
       display: "block",
-      position: "fixed",
+      position: "relative",
       border: "solid 3px green",
+      "margin-top": "5px",
     });
   });
 
 $("#overlay").bind("click", function (e) {
-  $("div[id^='equivalences']").css({ display: "none" });
+  $("div[id^='equivalences-']").css({ display: "none" });
   $("#overlay").css({ display: "none" });
 });
+
+$("body")
+  .off("click", ".equivalences-switch-to-array")
+  .on("click", ".equivalences-switch-to-array", function (e) {
+    const parentId = $(this).parent().parent().attr("id").split("-").slice(1);
+    let temp = "";
+    for (index of parentId) {
+      temp = temp + "-" + index;
+    }
+    console.log(parentId);
+    $(this)
+      .prev()
+      .replaceWith(
+        `<div style='min-height: 50px;min-width: 50px; border: 1px solid red; margin-left: 10px;' id="equivalences_array${temp}">
+        <input type="button" value="Add Element to Array" class="equivalences-add-to-array" />
+       </div>`
+      );
+  });
+
+//equivalences_array
+$("body")
+  .off("click", ".equivalences-add-to-array")
+  .on("click", ".equivalences-add-to-array", function (e) {
+    const oldarrayIds = $(this).parent().attr("id").split("-").slice(1);
+    console.log(oldarrayIds);
+    if ($(this).prev().length === 0) {
+      let eleId = "";
+      for (index of oldarrayIds) {
+        eleId = eleId + "-" + index;
+      }
+      $(this).parent()
+        .prepend(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=equivalences_array_element${eleId}%0>
+        <div>
+            <input
+            type="text"
+            name="message"
+            autocomplete="off"
+            placeholder="message"
+            id="equivalences_message${eleId}%0"
+        />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="content"
+            autocomplete="off"
+            placeholder="content"
+            id="equivalences_content${eleId}%0"
+            />
+            <input type="button" value="SWITCH TO ARRAY" class="equivalences-switch-to-array" />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="relationship"
+            autocomplete="off"
+            placeholder="relationship"
+            id="equivalences_relationship${eleId}%0"
+            />
+        </div>
+    </div>`);
+    } else {
+      //get pre ele and change last char
+      const preId = $(this).prev().attr("id");
+      let prevEle = preId.split("%");
+      console.log(prevEle);
+      //can be improved here@@
+      $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=equivalences_array_element${preId.slice(
+        0,
+        -2
+      )}%${parseInt(prevEle[prevEle.length - 1]) + 1}>
+        <div>
+            <input
+            type="text"
+            name="message"
+            autocomplete="off"
+            placeholder="message"
+            id="equivalences_message${preId.slice(0, -2)}%${
+        parseInt(prevEle[prevEle.length - 1]) + 1
+      }"
+        />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="content"
+            autocomplete="off"
+            placeholder="content"
+            id=""equivalences_content${preId.slice(0, -2)}%${
+        parseInt(prevEle[prevEle.length - 1]) + 1
+      }""
+            />
+            <input type="button" value="SWITCH TO ARRAY" class="equivalences-switch-to-array" />
+        </div>
+        <div>
+            <input
+            type="text"
+            name="relationship"
+            autocomplete="off"
+            placeholder="relationship"
+            id="equivalences_relationship${preId.slice(0, -2)}%${
+        parseInt(prevEle[prevEle.length - 1]) + 1
+      }"
+            />
+        </div>      
+    </div>`).insertAfter($(this).prev());
+    }
+  });
+
+function checkboxEvent(id) {
+  $(id).on("change", function () {
+    if ($(this).prop("checked") == true) {
+      $(this).prev().css({ display: "block" });
+    } else {
+      $(this).prev().css({ display: "none" });
+    }
+  });
+}
