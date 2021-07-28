@@ -1,4 +1,4 @@
-let sectionCounter = 0;
+let checkedboxList = [];
 
 var add_matchcondition = $("#add_matchcondition");
 $(add_matchcondition)
@@ -214,6 +214,7 @@ function addElementToArray(e) {
         <input type="checkbox" id="has-equivalences${temp}-${0}">
         <label for="has-equivalences${temp}-${0}">Has equivalences?</label>
     </div>`);
+    disableNecessarycheckbox(`has-equivalences${temp}-${0}`);
     checkboxEvent(`#has-equivalences${temp}-${0}`);
     console.log(indexs);
     let commonPrefix;
@@ -345,6 +346,9 @@ function addElementToArray(e) {
       parseInt(prevEle[prevEle.length - 1]) + 1
     }">Has equivalences?</label>
     </div>`).insertAfter($(this).prev());
+    disableNecessarycheckbox(
+      `has-equivalences${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`
+    );
     checkboxEvent(
       `#has-equivalences${temp}-${parseInt(prevEle[prevEle.length - 1]) + 1}`
     );
@@ -537,10 +541,43 @@ $("body")
 
 function checkboxEvent(id) {
   $(id).on("change", function () {
+    const currentEleId = $(this).attr("id");
+    const indexs = $(this).attr("id").split("-").slice(2);
+    console.log(indexs);
+    let checkboxId = "has-equivalences";
+    let arrayId = "has-equivalences";
     if ($(this).prop("checked") == true) {
+      //check if we can add equ here.if yes, add object to agreement else revert checkbox state to unchecked
+      for (index of indexs.slice(0, -1)) {
+        checkboxId = checkboxId + "-" + index;
+        arrayId = arrayId + "-" + index;
+        $(`#${checkboxId}`).attr("disabled", true);
+      }
+      arrayId = arrayId + "-" + `${indexs[indexs.length - 1]}`;
+      checkedboxList.push(arrayId);
+      //$(`#${array}`).;
       $(this).prev().css({ display: "block" });
+      //disable some checkboxs in current dom
+      $(`[id^=${currentEleId}-]`).attr("disabled", true);
     } else {
+      for (index of indexs.slice(0, -1)) {
+        checkboxId = checkboxId + "-" + index;
+        arrayId = arrayId + "-" + index;
+        $(`#${checkboxId}`).attr("disabled", false);
+      }
       $(this).prev().css({ display: "none" });
+      $(`[id^=${currentEleId}-]`).attr("disabled", false);
+      const target = checkedboxList.indexOf(currentEleId);
+      checkedboxList.splice(target, 1);
     }
   });
+}
+
+function disableNecessarycheckbox(id) {
+  for (checkedId of checkedboxList) {
+    if (id.startsWith(checkedId) && checkedId !== id) {
+      console.log("here");
+      $(`#${id}`).attr("disabled", true);
+    }
+  }
 }
