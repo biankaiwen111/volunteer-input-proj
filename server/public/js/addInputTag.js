@@ -434,6 +434,7 @@ $("#overlay").bind("click", function (e) {
 $("body")
   .off("click", ".equivalences-switch-to-array")
   .on("click", ".equivalences-switch-to-array", function (e) {
+    let evalString = `agreement["sections"]`;
     const parentId = $(this).parent().parent().attr("id").split("-").slice(1);
     let temp = "";
     for (index of parentId) {
@@ -495,21 +496,22 @@ $("body")
       //get pre ele and change last char
       const preId = $(this).prev().attr("id");
       let prevEle = preId.split("%");
+      let currentId = prevEle[0];
+      for (idx of prevEle.slice(1, -1)) {
+        currentId = currentId + "%" + idx;
+      }
+      currentId =
+        currentId + "%" + `${parseInt(prevEle[prevEle.length - 1]) + 1}`;
       console.log(prevEle);
       //can be improved here@@
-      $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=equivalences_array_element${preId.slice(
-        0,
-        -2
-      )}%${parseInt(prevEle[prevEle.length - 1]) + 1}>
+      $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=${currentId}>
         <div>
             <input
             type="text"
             name="message"
             autocomplete="off"
             placeholder="message"
-            id="equivalences_message${preId.slice(0, -2)}%${
-        parseInt(prevEle[prevEle.length - 1]) + 1
-      }"
+            id="equivalences_message${currentId.slice(26)}"
         />
         </div>
         <div>
@@ -518,9 +520,7 @@ $("body")
             name="content"
             autocomplete="off"
             placeholder="content"
-            id=""equivalences_content${preId.slice(0, -2)}%${
-        parseInt(prevEle[prevEle.length - 1]) + 1
-      }""
+            id="equivalences_content${currentId.slice(26)}"
             />
             <input type="button" value="SWITCH TO ARRAY" class="equivalences-switch-to-array" />
         </div>
@@ -530,9 +530,7 @@ $("body")
             name="relationship"
             autocomplete="off"
             placeholder="relationship"
-            id="equivalences_relationship${preId.slice(0, -2)}%${
-        parseInt(prevEle[prevEle.length - 1]) + 1
-      }"
+            id="equivalences_relationship${currentId.slice(26)}"
             />
         </div>      
     </div>`).insertAfter($(this).prev());
@@ -559,6 +557,8 @@ function checkboxEvent(id) {
       $(this).prev().css({ display: "block" });
       //disable some checkboxs in current dom
       $(`[id^=${currentEleId}-]`).attr("disabled", true);
+      //add a empty object to agreemetn
+      addEmptyEquivalenceObjectToAgreementById(currentEleId);
     } else {
       for (index of indexs.slice(0, -1)) {
         checkboxId = checkboxId + "-" + index;
@@ -569,6 +569,8 @@ function checkboxEvent(id) {
       $(`[id^=${currentEleId}-]`).attr("disabled", false);
       const target = checkedboxList.indexOf(currentEleId);
       checkedboxList.splice(target, 1);
+      removeEquivalenceObjectFromAgreementById(currentEleId);
+      cleanEquivalenceObjectFromDom(currentEleId);
     }
   });
 }
@@ -580,4 +582,54 @@ function disableNecessarycheckbox(id) {
       $(`#${id}`).attr("disabled", true);
     }
   }
+}
+
+function addEmptyEquivalenceObjectToAgreementById(id) {
+  const indexs = id.split("-").slice(2);
+  console.log(indexs);
+  let evalString = `agreement["sections"]`;
+  for (index of indexs.slice(0, -1)) {
+    evalString = evalString + `[${index}]['content']`;
+  }
+  console.log(evalString);
+  evalString =
+    evalString +
+    `[${indexs[indexs.length - 1]}]` +
+    `["equivalences"] = {message:"",content:"",relationship:""}`;
+  console.log(evalString);
+  eval(evalString);
+}
+
+function removeEquivalenceObjectFromAgreementById(id) {
+  const indexs = id.split("-").slice(2);
+  console.log(indexs);
+  let evalString = `agreement["sections"]`;
+  for (index of indexs.slice(0, -1)) {
+    evalString = evalString + `[${index}]['content']`;
+  }
+  console.log(evalString);
+  evalString =
+    evalString + `[${indexs[indexs.length - 1]}]` + `["equivalences"]`;
+  evalString = "delete " + evalString;
+  console.log(evalString);
+  eval(evalString);
+}
+
+function cleanEquivalenceObjectFromDom(id) {
+  //equivalences_array-2-0 <- has-equivalences-2-0
+  const indexs = id.split("-").slice(2);
+  let target = "equivalences_array";
+  let replacedId = "equivalences-content";
+  for (index of indexs) {
+    target = target + "-" + index;
+    replacedId = replacedId + "-" + index;
+  }
+  console.log(target);
+  $(`#${target}`).replaceWith(`<input
+            type="text"
+            name="content"
+            autocomplete="off"
+            placeholder="content"
+            id="${replacedId}"
+            />`);
 }
