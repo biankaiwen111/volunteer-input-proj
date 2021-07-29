@@ -434,7 +434,6 @@ $("#overlay").bind("click", function (e) {
 $("body")
   .off("click", ".equivalences-switch-to-array")
   .on("click", ".equivalences-switch-to-array", function (e) {
-    let evalString = `agreement["sections"]`;
     const parentId = $(this).parent().parent().attr("id").split("-").slice(1);
     let temp = "";
     for (index of parentId) {
@@ -448,6 +447,40 @@ $("body")
         <input type="button" value="Add Element to Array" class="equivalences-add-to-array" />
        </div>`
       );
+
+    //switch string to array,["*****", "2", "1","1%1"]
+    const grandparentId = $(this).parent().parent().attr("id").split("-");
+    const outerIndexs = grandparentId.slice(1, -1);
+    const insideIndexs = grandparentId[grandparentId.length - 1].split("%");
+
+    // if ($(this).parent().parent().attr("id").includes("%")) {
+    //   let evalString = `agreement["sections"]`;
+    //   for (index of outerIndexs) {
+    //     evalString = evalString + `[${index}]` + '["content"]';
+    //   }
+    //   evalString = evalString + `[${insideIndexs[0]}]`;
+    //   evalString = evalString + `["equivalences"]["content"]`;
+
+    //   for (index of insideIndexs.slice(1)) {
+    //     evalString = evalString + `[${index}]` + '["content"]';
+    //   }
+    //   evalString = evalString + `=[]`;
+    //   console.log(evalString);
+    //   eval(evalString);
+    // } else {
+    let evalString = `agreement["sections"]`;
+    for (index of outerIndexs) {
+      evalString = evalString + `[${index}]` + '["content"]';
+    }
+    evalString =
+      evalString +
+      `[${outerIndexs[outerIndexs.length - 1]}]` +
+      `["equivalences"]["content"]` +
+      `=[]`;
+    console.log(evalString);
+    eval(evalString);
+    // }
+    // still has some bugs! 7.29
   });
 
 //equivalences_array
