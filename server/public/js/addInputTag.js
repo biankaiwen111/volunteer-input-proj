@@ -453,34 +453,33 @@ $("body")
     const outerIndexs = grandparentId.slice(1, -1);
     const insideIndexs = grandparentId[grandparentId.length - 1].split("%");
 
-    // if ($(this).parent().parent().attr("id").includes("%")) {
-    //   let evalString = `agreement["sections"]`;
-    //   for (index of outerIndexs) {
-    //     evalString = evalString + `[${index}]` + '["content"]';
-    //   }
-    //   evalString = evalString + `[${insideIndexs[0]}]`;
-    //   evalString = evalString + `["equivalences"]["content"]`;
+    if ($(this).parent().parent().attr("id").includes("%")) {
+      let evalString = `agreement["sections"]`;
+      for (index of outerIndexs) {
+        evalString = evalString + `[${index}]` + '["content"]';
+      }
+      evalString = evalString + `[${insideIndexs[0]}]`;
+      evalString = evalString + `["equivalences"]["content"]`;
 
-    //   for (index of insideIndexs.slice(1)) {
-    //     evalString = evalString + `[${index}]` + '["content"]';
-    //   }
-    //   evalString = evalString + `=[]`;
-    //   console.log(evalString);
-    //   eval(evalString);
-    // } else {
-    let evalString = `agreement["sections"]`;
-    for (index of outerIndexs) {
-      evalString = evalString + `[${index}]` + '["content"]';
+      for (index of insideIndexs.slice(1)) {
+        evalString = evalString + `[${index}]` + '["content"]';
+      }
+      evalString = evalString + `=[]`;
+      console.log(evalString);
+      eval(evalString);
+    } else {
+      let evalString = `agreement["sections"]`;
+      for (index of outerIndexs) {
+        evalString = evalString + `[${index}]` + '["content"]';
+      }
+      evalString =
+        evalString +
+        `[${grandparentId[grandparentId.length - 1]}]` +
+        `["equivalences"]["content"]` +
+        `=[]`;
+      console.log(evalString);
+      eval(evalString);
     }
-    evalString =
-      evalString +
-      `[${outerIndexs[outerIndexs.length - 1]}]` +
-      `["equivalences"]["content"]` +
-      `=[]`;
-    console.log(evalString);
-    eval(evalString);
-    // }
-    // still has some bugs! 7.29
   });
 
 //equivalences_array
@@ -568,6 +567,7 @@ $("body")
         </div>      
     </div>`).insertAfter($(this).prev());
     }
+    addObjectToEquivalenceArrayById($(this).parent().attr("id"));
   });
 
 function checkboxEvent(id) {
@@ -665,4 +665,34 @@ function cleanEquivalenceObjectFromDom(id) {
             placeholder="content"
             id="${replacedId}"
             />`);
+}
+
+function addObjectToEquivalenceArrayById(id) {
+  const splitedId = id.split("-");
+  if (id.includes("%")) {
+    let evalString = `agreement["sections"]`;
+    for (token of splitedId.slice(1, -1)) {
+      evalString = evalString + `[${token}]["content"]`;
+    }
+    const insideTokens = splitedId[splitedId.length - 1]; //"1%0"
+    const insideSplitedTokens = insideTokens.split("%"); //["1","0"]
+    evalString = evalString + `[${insideSplitedTokens[0]}]["equivalences"]`;
+    for (token of insideSplitedTokens.slice(1)) {
+      evalString = evalString + `["content"][${token}]`;
+    }
+    evalString =
+      evalString + `["content"].push({message:"",content:"",relationship:""})`;
+    eval(evalString);
+  } else {
+    let evalString = `agreement["sections"]`;
+    for (token of splitedId.slice(1, -1)) {
+      evalString = evalString + `[${token}]["content"]`;
+    }
+    evalString =
+      evalString +
+      `[${splitedId[splitedId.length - 1]}]` +
+      `["equivalences"]["content"].push({message:"",content:"",relationship:""})`;
+    console.log(evalString);
+    eval(evalString);
+  }
 }
