@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
+const util = require("util");
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -11,7 +12,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/agreement", (req, res) => {
-  console.log(req.body);
+  console.log(util.inspect(req.body, { showHidden: false, depth: null }));
   res.send("Post agreement successfully");
 });
 

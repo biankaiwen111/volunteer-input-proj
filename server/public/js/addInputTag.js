@@ -187,7 +187,7 @@ function addElementToArray(e) {
             name="message"
             autocomplete="off"
             placeholder="message"
-            id="equivalences-message${temp}-${0}"
+            id="equivalences_message${temp}-${0}"
           />
           </div>
           <div>
@@ -196,7 +196,7 @@ function addElementToArray(e) {
             name="content"
             autocomplete="off"
             placeholder="content"
-            id="equivalences-content${temp}-${0}"
+            id="equivalences_content${temp}-${0}"
           />
             <input type="button" value="SWITCH TO ARRAY" class="equivalences-switch-to-array" />
           </div>
@@ -206,7 +206,7 @@ function addElementToArray(e) {
             name="relationship"
             autocomplete="off"
             placeholder="relationship"
-            id="equivalences-relationship${temp}-${0}"
+            id="equivalences_relationship${temp}-${0}"
             />
           </div>
         </div>
@@ -310,7 +310,7 @@ function addElementToArray(e) {
             name="message"
             autocomplete="off"
             placeholder="message"
-            id="equivalences-message${temp}-${
+            id="equivalences_message${temp}-${
       parseInt(prevEle[prevEle.length - 1]) + 1
     }"
         />
@@ -321,7 +321,7 @@ function addElementToArray(e) {
             name="content"
             autocomplete="off"
             placeholder="content"
-            id="equivalences-content${temp}-${
+            id="equivalences_content${temp}-${
       parseInt(prevEle[prevEle.length - 1]) + 1
     }"
             />
@@ -333,7 +333,7 @@ function addElementToArray(e) {
             name="relationship"
             autocomplete="off"
             placeholder="relationship"
-            id="equivalences-relationship${temp}-${
+            id="equivalences_relationship${temp}-${
       parseInt(prevEle[prevEle.length - 1]) + 1
     }"/>
         </div>
@@ -524,6 +524,18 @@ $("body")
             />
         </div>
     </div>`);
+      addEventlisternerToObjectInEquivalences(
+        `equivalences_message${eleId}%0`,
+        "message"
+      );
+      addEventlisternerToObjectInEquivalences(
+        `equivalences_content${eleId}%0`,
+        "content"
+      );
+      addEventlisternerToObjectInEquivalences(
+        `equivalences_relationship${eleId}%0`,
+        "relationship"
+      );
     } else {
       //get pre ele and change last char
       const preId = $(this).prev().attr("id");
@@ -566,6 +578,18 @@ $("body")
             />
         </div>      
     </div>`).insertAfter($(this).prev());
+      addEventlisternerToObjectInEquivalences(
+        `equivalences_message${currentId.slice(26)}`,
+        "message"
+      );
+      addEventlisternerToObjectInEquivalences(
+        `equivalences_content${currentId.slice(26)}`,
+        "content"
+      );
+      addEventlisternerToObjectInEquivalences(
+        `equivalences_relationship${currentId.slice(26)}`,
+        "relationship"
+      );
     }
     addObjectToEquivalenceArrayById($(this).parent().attr("id"));
   });
@@ -592,6 +616,18 @@ function checkboxEvent(id) {
       $(`[id^=${currentEleId}-]`).attr("disabled", true);
       //add a empty object to agreemetn
       addEmptyEquivalenceObjectToAgreementById(currentEleId);
+      addEventlisternerToObjectInEquivalences(
+        $(this).prev().prev().attr("id"),
+        "message"
+      );
+      addEventlisternerToObjectInEquivalences(
+        $(this).prev().prev().attr("id"),
+        "content"
+      );
+      addEventlisternerToObjectInEquivalences(
+        $(this).prev().prev().attr("id"),
+        "relationship"
+      );
     } else {
       for (index of indexs.slice(0, -1)) {
         checkboxId = checkboxId + "-" + index;
@@ -694,5 +730,63 @@ function addObjectToEquivalenceArrayById(id) {
       `["equivalences"]["content"].push({message:"",content:"",relationship:""})`;
     console.log(evalString);
     eval(evalString);
+  }
+}
+
+function esacpeId(id) {
+  let escapedId = "";
+  for (let i = 0; i < id.length; i++) {
+    if (id[i] !== "%") {
+      escapedId += id[i];
+    } else {
+      escapedId += `\\${id[i]}`;
+    }
+  }
+  return escapedId;
+}
+
+function addEventlisternerToObjectInEquivalences(id, entryName) {
+  const splitedId = id.split("-");
+  if (id.includes("%")) {
+    console.log(id);
+    let evalString = `agreement["sections"]`;
+    for (index of splitedId.slice(1, -1)) {
+      evalString = evalString + `[${index}]["content"]`;
+    }
+    const lastId = splitedId[splitedId.length - 1]; //0%0%1
+    const splitedLastId = lastId.split("%"); //[0, 0, 1]
+    evalString = evalString + `[${splitedLastId[0]}]["equivalences"]`;
+    for (num of splitedLastId.slice(1)) {
+      evalString = evalString + `['content'][${num}]`;
+    }
+    evalString = evalString + `["${entryName}"]=$(this).val();`;
+    console.log(evalString);
+    let escapedId = esacpeId(id);
+    $(`#${escapedId}`).on("input", function () {
+      console.log(id);
+      console.log(evalString);
+      eval(evalString);
+    });
+  } else {
+    let inputId = `equivalences_${entryName}`;
+    for (temp of splitedId.slice(1)) {
+      inputId = inputId + "-" + temp;
+    }
+    let evalString = `agreement["sections"]`;
+    const indexs = splitedId.slice(1, -1);
+    for (index of indexs) {
+      evalString = evalString + `[${index}]["content"]`;
+    }
+    console.log(this);
+    evalString =
+      evalString +
+      `[${
+        splitedId[splitedId.length - 1]
+      }]["equivalences"]["${entryName}"] = $(this).val();`;
+    $(`#${inputId}`).on("input", function () {
+      console.log(inputId);
+      console.log(evalString);
+      eval(evalString);
+    });
   }
 }
