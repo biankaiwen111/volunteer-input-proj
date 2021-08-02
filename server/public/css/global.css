@@ -3,6 +3,10 @@ div {
   border-radius: 10px;
 }
 
+body {
+  background-color: #ddd;
+}
+
 input[type="text"] {
   box-shadow: inset 0px 1px 0px 0px #ffffff;
   background-color: #ffffff;
@@ -34,6 +38,7 @@ input[type="button"] {
   padding: 6px 24px;
   text-decoration: none;
   text-shadow: 0px 1px 0px #ffffff;
+  margin: 10px;
 }
 
 input[type="button"]:hover {
@@ -44,4 +49,9 @@ input[type="button"]:hover {
 input[type="button"]:active {
   position: relative;
   top: 1px;
+}
+
+.switch-to-info-section {
+  background: linear-gradient(to bottom, #6e6d6d 5%, #413f3f 100%) !important;
+  color: #f0ecec !important;
 }

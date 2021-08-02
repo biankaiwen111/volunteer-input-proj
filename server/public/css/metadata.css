@@ -1,0 +1,5 @@
+#metadata {
+  border: 8px solid;
+  border-image: linear-gradient(45deg, turquoise, greenyellow) 1;
+  margin-right: 10px;
+}

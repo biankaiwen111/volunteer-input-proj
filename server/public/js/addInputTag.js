@@ -6,7 +6,7 @@ $(add_matchcondition)
   .click(function (e) {
     if ($(this).prev().length === 0) {
       $(input_wrapper).prepend(
-        `<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=section-element-${0}>
+        `<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=section-element-${0}>
         <div>
             <input
             type="text"
@@ -16,7 +16,7 @@ $(add_matchcondition)
             id="message-${0}"
         />
         </div>
-        <div>
+        <div id=section-content-div-${0}>
             <input
             type="text"
             name="content"
@@ -35,6 +35,7 @@ $(add_matchcondition)
             id="relationship-${0}"
             />
         </div>
+        <input type="button" value="SWITCH TO INFO SECTION" class="switch-to-info-section" />
     </div>`
       );
       //initialization
@@ -55,7 +56,7 @@ $(add_matchcondition)
       });
     } else {
       const id = parseInt($(this).prev().attr("id").split("-")[2]) + 1;
-      $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=section-element-${id}>
+      $(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=section-element-${id}>
         <div>
             <input
             type="text"
@@ -65,7 +66,7 @@ $(add_matchcondition)
             id="message-${id}"
         />
         </div>
-        <div>
+        <div id=section-content-div-${id}>
             <input
             type="text"
             name="content"
@@ -84,6 +85,7 @@ $(add_matchcondition)
             id="relationship-${id}"
             />
         </div>
+        <input type="button" value="SWITCH TO INFO SECTION" class="switch-to-info-section" />
     </div>`).insertAfter($(this).prev());
       //initialization
       agreement["sections"][parseInt(id)] = {};
@@ -117,7 +119,7 @@ $(add_matchcondition)
         $(this)
           .prev()
           .replaceWith(
-            `<div style='min-height: 50px;min-width: 50px; border: 1px solid red; margin-left: 10px;' id="array${temp}">
+            `<div style='min-height: 50px;min-width: 50px; border: 3px solid #34ebcc; margin-left: 10px;' id="array${temp}">
         <input type="button" value="Add Element to Array" class="add-to-array" />
        </div>`
           );
@@ -151,7 +153,7 @@ function addElementToArray(e) {
   //console.log($(this).prev());
   if ($(this).prev().length === 0) {
     $($(this).parent())
-      .prepend(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element${temp}-${0}>
+      .prepend(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=array-element${temp}-${0}>
         <div>
             <input
             type="text"
@@ -268,7 +270,7 @@ function addElementToArray(e) {
   } else {
     let prevEle = $(this).prev().attr("id").split("-");
     //console.log(indexs);
-    $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=array-element${temp}-${
+    $(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=array-element${temp}-${
       parseInt(prevEle[prevEle.length - 1]) + 1
     }>
         <div>
@@ -421,7 +423,7 @@ $("body")
     $(this).prev().css({
       display: "block",
       position: "relative",
-      border: "solid 3px green",
+      border: "solid 3px #b7eb34",
       "margin-top": "5px",
     });
   });
@@ -443,7 +445,7 @@ $("body")
     $(this)
       .prev()
       .replaceWith(
-        `<div style='min-height: 50px;min-width: 50px; border: 1px solid red; margin-left: 10px;' id="equivalences_array${temp}">
+        `<div style='min-height: 50px;min-width: 50px; border: 3px solid #34ebcc; margin-left: 10px;' id="equivalences_array${temp}">
         <input type="button" value="Add Element to Array" class="equivalences-add-to-array" />
        </div>`
       );
@@ -494,7 +496,7 @@ $("body")
         eleId = eleId + "-" + index;
       }
       $(this).parent()
-        .prepend(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=equivalences_array_element${eleId}%0>
+        .prepend(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=equivalences_array_element${eleId}%0>
         <div>
             <input
             type="text"
@@ -548,7 +550,7 @@ $("body")
         currentId + "%" + `${parseInt(prevEle[prevEle.length - 1]) + 1}`;
       console.log(prevEle);
       //can be improved here@@
-      $(`<div style='min-width: 90vw; margin: 10px; border: 1px solid blue' id=${currentId}>
+      $(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=${currentId}>
         <div>
             <input
             type="text"

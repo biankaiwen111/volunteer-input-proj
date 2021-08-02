@@ -12,6 +12,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/agreement", (req, res) => {
+  //console.log(req.body["sections"][1]["content"]);
+  //console.log("--------------");
   console.log(util.inspect(req.body, { showHidden: false, depth: null }));
   res.send("Post agreement successfully");
 });
