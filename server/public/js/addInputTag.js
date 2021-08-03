@@ -6,7 +6,7 @@ $(add_matchcondition)
   .click(function (e) {
     if ($(this).prev().length === 0) {
       $(input_wrapper).prepend(
-        `<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=section-element-${0}>
+        `<div style='margin: 10px; border: 2px solid #ebbd34' id=section-element-${0}>
         <div>
             <input
             type="text"
@@ -56,7 +56,7 @@ $(add_matchcondition)
       });
     } else {
       const id = parseInt($(this).prev().attr("id").split("-")[2]) + 1;
-      $(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=section-element-${id}>
+      $(`<div style='margin: 10px; border: 2px solid #ebbd34' id=section-element-${id}>
         <div>
             <input
             type="text"
@@ -119,7 +119,7 @@ $(add_matchcondition)
         $(this)
           .prev()
           .replaceWith(
-            `<div style='min-height: 50px;min-width: 50px; border: 3px solid #34ebcc; margin-left: 10px;' id="array${temp}">
+            `<div style='min-height: 50px; border: 3px solid #34ebcc; margin-left: 10px;' id="array${temp}">
         <input type="button" value="Add Element to Array" class="add-to-array" />
        </div>`
           );
@@ -153,7 +153,7 @@ function addElementToArray(e) {
   //console.log($(this).prev());
   if ($(this).prev().length === 0) {
     $($(this).parent())
-      .prepend(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=array-element${temp}-${0}>
+      .prepend(`<div style=' margin: 10px; border: 2px solid #ebbd34' id=array-element${temp}-${0}>
         <div>
             <input
             type="text"
@@ -213,7 +213,7 @@ function addElementToArray(e) {
           </div>
         </div>
         <input type="button" value="EDITING EQUIVALENCES" class="editing-equ" style="display:none" />
-        <input type="checkbox" id="has-equivalences${temp}-${0}">
+        <input type="checkbox" id="has-equivalences${temp}-${0}" class="switch">
         <label for="has-equivalences${temp}-${0}">Has equivalences?</label>
     </div>`);
     disableNecessarycheckbox(`has-equivalences${temp}-${0}`);
@@ -270,7 +270,7 @@ function addElementToArray(e) {
   } else {
     let prevEle = $(this).prev().attr("id").split("-");
     //console.log(indexs);
-    $(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=array-element${temp}-${
+    $(`<div style='margin: 10px; border: 2px solid #ebbd34' id=array-element${temp}-${
       parseInt(prevEle[prevEle.length - 1]) + 1
     }>
         <div>
@@ -343,7 +343,7 @@ function addElementToArray(e) {
         <input type="button" value="EDITING EQUIVALENCES" class="editing-equ" style="display:none"/>
         <input type="checkbox" id="has-equivalences${temp}-${
       parseInt(prevEle[prevEle.length - 1]) + 1
-    }">
+    }" class="switch">
         <label for="has-equivalences${temp}-${
       parseInt(prevEle[prevEle.length - 1]) + 1
     }">Has equivalences?</label>
@@ -445,7 +445,7 @@ $("body")
     $(this)
       .prev()
       .replaceWith(
-        `<div style='min-height: 50px;min-width: 50px; border: 3px solid #34ebcc; margin-left: 10px;' id="equivalences_array${temp}">
+        `<div style='min-height: 50px; border: 3px solid #34ebcc; margin-left: 10px;' id="equivalences_array${temp}">
         <input type="button" value="Add Element to Array" class="equivalences-add-to-array" />
        </div>`
       );
@@ -496,7 +496,7 @@ $("body")
         eleId = eleId + "-" + index;
       }
       $(this).parent()
-        .prepend(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=equivalences_array_element${eleId}%0>
+        .prepend(`<div style='margin: 10px; border: 2px solid #ebbd34' id=equivalences_array_element${eleId}%0>
         <div>
             <input
             type="text"
@@ -550,7 +550,7 @@ $("body")
         currentId + "%" + `${parseInt(prevEle[prevEle.length - 1]) + 1}`;
       console.log(prevEle);
       //can be improved here@@
-      $(`<div style='min-width: 90vw; margin: 10px; border: 2px solid #ebbd34' id=${currentId}>
+      $(`<div style='margin: 10px; border: 2px solid #ebbd34' id=${currentId}>
         <div>
             <input
             type="text"

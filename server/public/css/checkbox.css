@@ -1,0 +1,51 @@
+input[type="checkbox"].switch {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 3.5em;
+  height: 1.5em;
+  background: #666;
+  border-radius: 3em;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  display: inline-block;
+  vertical-align: middle;
+  margin-bottom: 3px;
+}
+
+body label {
+  margin: 3px 0;
+  vertical-align: middle;
+}
+
+input[type="checkbox"].switch:checked {
+  background: #0ebeff;
+}
+
+input[type="checkbox"].switch:disabled {
+  background: #e00d4d;
+  opacity: 0.2;
+}
+
+input[type="checkbox"].switch:after {
+  position: absolute;
+  content: "";
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background: #fff;
+  -webkit-box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0.25em rgba(0, 0, 0, 0.3);
+  -webkit-transform: scale(0.7);
+  transform: scale(0.7);
+  left: 0;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="checkbox"].switch:checked:after {
+  left: calc(100% - 1.5em);
+}
